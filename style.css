@@ -21,9 +21,9 @@ header {
 }
 
 .headshot {
-    width: 200px;
-    height: 200px;
-    margin-top: 10%
+    width: 10vw;
+    height: 20vh;
+    margin-top: 5vh
 }
 
 .header-container ul {
