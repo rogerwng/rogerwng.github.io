@@ -1,3 +1,3 @@
 This repo is currently in development.  
 
-It will eventuall feature my portfolio website.
+It will eventually feature my portfolio website.
