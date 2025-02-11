@@ -39,7 +39,8 @@ header {
 
 .header-container h1 {
     text-align:  center;
-    font-size: 200%;
+    /* font-size: 200%; */
+    font-size: 4vmin;
 }
 
 .headshot {
@@ -92,6 +93,7 @@ nav {
     width: 35vw; 
     height: 21.5vh;
     padding-top: 12.5vh;
+    padding-bottom: 0;
     background-color: var(--bg-color);
 }
 
@@ -103,7 +105,8 @@ nav ul {
     margin: 0;
     margin-top: 4vh;
 
-    font-size: 130%;
+    /* font-size: 130%; */
+    font-size: 2.8vmin;
 }
 
 nav a:hover {
