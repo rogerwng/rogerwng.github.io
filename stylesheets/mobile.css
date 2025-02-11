@@ -1,0 +1,7 @@
+/* Define color scheme */
+:root {
+    --hover-color: rgb(170, 161, 161);
+    --bg-color: white;
+    --nav-border-color: black;
+    --item-border-color: rgb(196, 196, 196);
+}
