@@ -23,7 +23,7 @@ header {
     height: 100vh;
     width: 40vw;
     display: flex;
-    justify-content:flex-end;
+    justify-content: flex-end;
     align-items: center;
 }
 
@@ -145,7 +145,7 @@ main ol {
     font-style: italic;
 }
 
-main ol div h2 {
+.project-header h2 {
     padding: 0;
     margin: 0;
 }
