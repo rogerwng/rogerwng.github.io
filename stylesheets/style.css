@@ -5,6 +5,7 @@
     --nav-border-color: black;
     --item-border-color: rgb(196, 196, 196);
     --nav-text-color: black;
+    --body-text-color: black;
 }
 
 body {
@@ -165,16 +166,6 @@ main ol {
     margin: 0;
 }
 
-.project-header a {
-    text-decoration: none;
-    color: var(--nav-text-color);
-}
-
-.project-header a:hover {
-    font-weight: bold;
-    color: var(--hover-color);
-}
-
 .project-content {
     display: flex;
     flex-direction: column;
@@ -211,6 +202,15 @@ main ol {
 main ol li {
     margin-top: 1vh;
     border-bottom: 1px solid var(--item-border-color);
+}
+
+.article-link {
+    text-decoration: none;
+    color: var(--body-text-color);
+}
+
+.article-link:hover {
+    color: var(--hover-color)
 }
 
 /* 
