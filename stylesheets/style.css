@@ -4,6 +4,7 @@
     --bg-color: white;
     --nav-border-color: black;
     --item-border-color: rgb(196, 196, 196);
+    --nav-text-color: black;
 }
 
 body {
@@ -109,6 +110,11 @@ nav ul {
     font-size: 2.8vmin;
 }
 
+nav a {
+    color: var(--nav-text-color);
+    text-decoration: none;
+}
+
 nav a:hover {
     color: var(--hover-color);
 }
@@ -169,7 +175,7 @@ main ol {
     margin: 0;
     margin-top: 1vh;
     width: 28.5vw;
-    text-align: justify;
+    text-align: left;
 }
 
 .project-content img {
@@ -189,4 +195,43 @@ main ol {
 main ol li {
     margin-top: 1vh;
     border-bottom: 1px solid var(--item-border-color);
+}
+
+/* 
+    Contact page
+*/
+.contact-box {
+    width: 33vw;
+    box-sizing: border-box;
+    margin-left: 42vw;
+    margin-top: 22.5vh;
+    list-style: none;
+    padding: 0;
+}
+
+.contact-box p {
+    font-size: 100%;
+}
+
+.contact-box div {
+    display: flex;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-box div p {
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    margin-top: 0.25vh;
+}
+
+.contact-box div img {
+    width: 1.5vh;
+    height: 1.5vh;
+    padding: 0;
+    margin: 0;
+    margin-top: 0.5%;
+    margin-right: 1%;
 }
