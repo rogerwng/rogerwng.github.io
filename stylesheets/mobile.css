@@ -72,6 +72,16 @@ header {
     margin-top: 3%;
 }
 
+.header-container p {
+    font-size: 90%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+}
+
+#description {
+    text-align: left;
+}
+
 /* 
     NAV BAR
 */
