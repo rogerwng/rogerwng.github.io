@@ -60,7 +60,7 @@ header {
     gap: 20px;
     padding: 0;
     margin: 0;
-    margin-top: 25%;
+    margin-top: 15%;
 }
 
 .header-container ul img {
@@ -194,13 +194,13 @@ main ol {
     width: 30vw;
     text-align: left;
     font-size: small;
+    margin-bottom: 1vh;
 }
 
 .project-content img {
     width: 30vw;
     height: auto;
-    margin-bottom: 2vh;
-    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 
 #footer {
