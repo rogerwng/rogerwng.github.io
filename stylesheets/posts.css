@@ -1,0 +1,175 @@
+/* Define color scheme */
+:root {
+    --hover-color: rgb(170, 161, 161);
+    --bg-color: white;
+    --nav-border-color: black;
+    --item-border-color: rgb(196, 196, 196);
+    --nav-text-color: black;
+    --body-text-color: black;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+    NAVBAR
+*/
+
+nav {
+    box-sizing: border-box;
+    margin-left: 0vw;
+    margin-top: 0vh;
+    border-bottom: 2px solid var(--nav-border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+
+    width: 80vw; 
+    height: 12vh;
+    padding-top: 0vh;
+    padding-bottom: 0;
+    background-color: var(--bg-color);
+}
+
+nav ul {
+    box-sizing: border-box;
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    position: absolute;
+    bottom: 1vh;
+    
+    gap: 8vw;
+    padding: 0;
+    margin: 0;
+    margin-top: 4vh;
+    
+    font-size: 1.5vw;
+    width: 35vw;
+}
+
+nav a {
+    color: var(--nav-text-color);
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: var(--hover-color);
+}
+
+#current-page {
+    font-weight: bold;
+}
+
+/* 
+    CONTENT
+*/
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    margin-top: 12vh;
+    width: 50vw;
+}
+
+#title {
+    font-size: 300%;
+    padding: 0;
+    margin-bottom: 0;
+    font-family: 'Oswald';
+
+    padding: 0;
+    margin: 0;
+}
+
+.heading {
+    font-size: 150%;
+    text-align: left;
+    font-family: 'Quattrocento Sans';
+    width: 100%;
+
+    padding: 0;
+    margin: 0;
+}
+
+.paragraph {
+    font-size: 100%;
+    text-align: justify;
+    font-family: 'Quattrocento Sans';
+    width: 100%;
+}
+
+.figure {
+    padding: 0;
+    margin: 1%;
+}
+
+/* 
+    FOOTER
+*/
+
+footer {
+    border-top: 1px solid var(--item-border-color);
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+footer p {
+    padding: 0;
+    margin: 0;
+    margin-top: 1vh;
+    font-size: x-small;
+    font-style: italic;
+    text-align: center;
+}
+
+
+.references {
+    width: 60%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-family: 'Quattrocento Sans';
+}
+
+.references p {
+    width: 100%;
+    text-align: center;
+    font-size: small;
+    font-weight: bold;
+    font-style:normal;
+}
+
+.references ul {
+    box-sizing: border-box;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    padding: 0;
+    margin: 0;
+
+    font-size: small;
+    text-align: justify;
+}
