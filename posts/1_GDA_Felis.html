@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Roger Wang">
+    
+    <meta name="description" content="Applying generative models to augment small datasets for image classification.">
+    <title>Tackling Data Scarcity with Generative Data Augmentation</title> 
+
+    <link id="stylesheet" rel="stylesheet" href="../stylesheets/posts.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Quattrocento+Sans">
+    <script src="script_post.js" defer></script>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Portfolio</a></li>
+            <li id="current-page"><a href="../blog.html">Blog</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+        </ul>
+     </nav>
+
+     <main>
+        <h1 id="title">Tackling Data Scarcity with Generative Data Augmentation</h1>
+
+        <p class="paragraph">
+            One of the biggest factors influencing model performance in image classification tasks is the size of the training dataset.
+            In fact, modern innovations in deep learning are heavily associated with the rising abundance of high-quality and gargantuan data collections. 
+            For many situations, deep learning is only effective when such large datasets are available. This is great news if you're training a 
+            classification model and just happen to have millions of images stashed away in your thumb drive, but how often does that happen?
+            In the real world, high-quality data can be incredibly difficult to source, label, and accumulate, thereby impeding the development
+            of effective deep learning classification models.
+        </p>
+
+        <p class="heading">Data Augmentation</p>
+        <p class="paragraph">
+            When stuck with small datasets, avoiding overfitting is the greatest concern. Traditional data-based regularization strategies
+            revolve around simple data augmentations. These common techniques, random cropping, flipping, color jitter, etc., expand
+            the training dataset size by introducing altered images that are simple transformations of their originals. The hope is that the 
+            added noise and complexity of these artificial datapoints will prevent overfitting.
+        </p>
+        <p class="paragraph">
+            However, traditional data augmentations don't actually create any new images, and don't provide new information for the model
+            to learn. This is where generative models, such as Stable Diffusion, come into play. Generative data augmentation attempts to increase dataset size, reduce overfitting,
+            and boost model performance by creating new images with relevant semantic meaning. 
+        </p>
+
+        <p class="heading">The Felis Dataset</p>
+        <p class="paragraph">
+            To experiment with GDA's potential, I used the <a href="https://www.kaggle.com/datasets/datahmifitb/felis-taxonomy-image-classification">Felis Dataset (Kaggle)</a>, a collection of roughly 500 pictures of cats from 7 species in the felis genus, which 
+            includes the common domestic housecat. The seven felis species, in no particular order, are the african wildcat,
+            blackfoot cat, chinese mountain cat, domestic cat, european wildcat, jungle cat, and the sand cat.
+        </p>
+
+        <div class="figure">
+            <img alt="Felis Images" src="../imgs/1/felis_wild.png">
+            <p>Figure 1. Samples of 6/7 of the speices in Felis.</p>
+        </div>
+
+        <p class="heading">Generative Models: Stable Diffusion</p>
+        <p class="paragraph">
+            The capability of image generation models has drastically improved in recent years. State of the art generators such as DallE, 
+            Imagen, and Stable Diffusion have taken the internet by storm. Stable Diffusion in particular, as an open-sourced model, has been especially notable 
+            due to the ease at which everyday practioners and students can leverage the model to create their own unique artwork. I'll defer the implementation and details of
+            latent diffusion and text-to-image conditioning to <a href="https://arxiv.org/pdf/2112.10752">the Stable Diffusion paper.</a> 
+        </p>
+        <p class="paragraph">
+            For downstream tasks and streamlined generation, several pretrained Stable Diffusion models are available through <a href="https://huggingface.co/docs/diffusers/en/index">the Huggingface Diffusers library.</a>
+            We can quickly import this library and use their <em>DiffusionPipeline</em> to generate images of the 7 felis species. However, we quickly run into an issue.
+        </p>
+
+        <div class="figure">
+            <img alt="Initial Felis Generations with Stable Diffusion" src="../imgs/1/initial_gen.png">
+            <p>Figure 2. Initial Felis Generations (top) with Stable Diffusion compared with original images (bottom).</p>
+        </div>
+
+        <p class="paragraph">
+            As you can see, the initial generations, while visually realistic, do not properly represent their respective species. These first-pass images are not
+            suitable for classification training since they are not accurate and not relevant. In fact, although out-of-the-box Stable Diffusion models
+            are indeed quite powerful, they must be carefully fine-tuned to generate semantically meaningful and task-specific images suitable for model training.
+            It's important to use high-quality natural images as well as high-quality generations because data quality has a direct impact on model performance.
+        </p>
+        <p class="paragraph">    
+            As the age-old data science adage goes: 
+            <strong>garbage in, garbage out.</strong>
+        </p>
+
+        <p class="heading">Dreambooth: Fine-tuning Stable Diffusion</p>
+        <p class="paragraph">
+            To fine-tune our base diffusion model, we will use <a href="https://arxiv.org/pdf/2208.12242">the Dreambooth method.</a>
+        </p>
+        <p class="paragraph">
+            Dreambooth is a paper published to CVPR in 2023 that details a fine-tuning technique for subject-driven image generation. Its cornerstone is the inclusion of 
+            "rare text tokens" in the text prompts of training images. These tokens, which are known in the model vocabulary but not associated with any significant semantic meaning,
+            are thus associated with the specific subjects in the image-prompt pairs. 
+        </p>
+        <p class="paragraph">
+            For example, when training the model on a select set of images of your favorite feline with the prompt <em>"a [V] cat"</em> the model learns to generate 
+            that specific cat in a variety of poses, backgrounds, and with other objects. This ability is referred to in the paper as <em>subject-driven generation</em> and
+            the process of training such a model is called <em>personalization.</em>
+        </p>
+        <div class="figure">
+            <img alt="Figure from Dreambooth Paper" src="../imgs/1/dreambooth_figure.png">
+            <p>Figure 3. Examples of Subject-Driven Generation from the Dreambooth Paper.</p>
+        </div>
+        <p class="paragraph">
+            Huggingface also provides scripts for Dreambooth personalization which we can either directly call in the terminal from a local <a href="https://github.com/huggingface/diffusers/tree/main/examples/dreambooth">Diffusers repo</a>, or access through one of many
+            Colab notebooks, like <a href="https://colab.research.google.com/github/ShivamShrirao/diffusers/blob/main/examples/dreambooth/DreamBooth_Stable_Diffusion.ipynb">this one by ShivamShrirao</a>, to streamline the process.
+        </p>
+        <p class="paragraph">
+            After personalization, we can finally generate a dataset full of meaningful and domain-specific synthetic images of our 7 felis species. Below are some random samples from the 
+            generated dataset. The size of the original Felis dataset is 519, with a random 80/20 train/test split. The generated data set has a size of 664 (no generated images are in test set).
+        </p>
+        <div class="figure">
+            <img alt="Fine-tuned Felis Generations" src="../imgs/1/gen.png">
+            <p>Figure 4. Generations (right) after Fine-tuning, compared with natural images (left).</p>
+        </div>
+
+        <p class="heading">Effects of Generative Data on Image Classification</p>
+        <p class="paragraph">
+            Now that we have relevant augmented training data, we can train a classification model and quantitatively analyze the effectiveness of GDA.
+        </p>
+        <p class="paragraph">
+            For these experiments, four ResNet18 models were trained. Two models were trained from randomly initialized weights (base) and two from ImageNet pretrained weights (pre).
+            The model naming conventions are as follows: <strong>BO - </strong>base model with only original data, <strong>BA - </strong>base model with original + augmentated data,
+            <strong>PO - </strong>pretrained model with only original data, <strong>PA - </strong>pretrained model with original + augmented data.
+        </p>
+        <p class="paragraph">
+            All models follow the same training methodology: 5 epochs, initial learning rate of 1e-04, and learning rate decay by 90% every 2 epochs. Here are the training results:
+        </p>
+        <div class="figure">
+            <img alt="Training Results" src="../imgs/1/training_results.png">
+            <p>Figure 5. Training Results of ResNet18 on Natural Images (solid lines) and with Generated Images (dashed).</p>
+        </div>
+        <p class="paragraph">
+            Evidently, the training accuracy of models augmented by generative data was higher for both base and pretrained ResNet18 models. Base models seem to reap higher benefits than pretrained,
+            with a perfomance boost of ~12% and ~3% respectively. These results support Generative Data Augmentation as a viable technique to boost image classification performance on small datasets.
+        </p>
+
+        <p class="heading">Considerations for Your Own Applications</p>
+        <p class="paragraph">
+            Despite these promising results, several limitations for GDA exist. First, the Dreambooth method for personalization is subject-specific, meaning that fine-tuning is performed with 
+            very specific subjects (in this case specific cats) in mind. Selecting a small set of specific images introduces a severe bias when attempting to generate images indicitive of a whole species of cats.
+            In this experiment, select images were chosen from each felis species to be fine-tuned on. These selections may not accurately describe the nuances within each species. Additionally, a separate diffusion
+            model must be fine-tuned for each species, which for applications with large cardinality of labels, will lead to an explosion of total model size. 
+        </p>
+        <p class="paragraph">
+            Furthermore, there is likely an upper limit to the perfomance gains provided by GDA. Artificial training data should likely not eclipse original data by a large proportion. In the event that this occurs,
+            for example augmenting a dataset of 1k images with 1mil generations, the model will likely no longer generalize to real data and thus exhibit worse performance. Similar to how a fine balance
+            must be struck between original data and traditional data augmentations such as random cropping.
+        </p>
+        <p class="paragraph">
+            Thus, careful consideration must be made when applying GDA to ensure that generated data is semantically relevant, represents the entire distribution of training data, and proportionally
+            consistent to prevent overfitting on artificial datapoints.
+            
+        </p>
+
+     </main>
+
+     <footer>
+        <p>Roger Wang - Published February 21st, 2025</p>
+        <div class="references">
+            <p>References</p>
+            <ul>
+                <li><a href="https://www.kaggle.com/datasets/datahmifitb/felis-taxonomy-image-classification">[1] Felis Dataset on Kaggle</a></li>
+                <li><a href="https://arxiv.org/pdf/2112.10752">[2] Stable Diffusion Paper</a></li>
+                <li><a href="https://huggingface.co/docs/diffusers/en/index">[3] Huggingface Diffusers Library</a></li>
+                <li><a href="https://arxiv.org/pdf/2208.12242">[4] Dreambooth Paper</a></li>
+                <li><a href="https://github.com/huggingface/diffusers/tree/main/examples/dreambooth">[5] Huggingface Dreambooth Repo</a></li>
+                <li><a href="https://colab.research.google.com/github/ShivamShrirao/diffusers/blob/main/examples/dreambooth/DreamBooth_Stable_Diffusion.ipynb">[6] ShivamShrirao's Dreambooth Notebook</a></li>
+            </ul>
+        </div>
+     </footer>
+</body>
+
+
+</html>
