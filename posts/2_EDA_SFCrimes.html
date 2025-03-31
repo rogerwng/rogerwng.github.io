@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Roger Wang">
+    
+    <meta name="description" content="Exploratory Data Analysis of Police Incident Report Data in San Francisco">
+    <title>EDA of SFCrimes</title> 
+
+    <link id="stylesheet" rel="stylesheet" href="../stylesheets/posts.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald|Quattrocento+Sans">
+    <script src="script_post.js" defer></script>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Portfolio</a></li>
+            <li id="current-page"><a href="../blog.html">Blog</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+        </ul>
+     </nav>
+
+     <main>
+        <h1 id="title">EDA of San Francisco's Police Incident Reports</h1>
+        <p class="paragraph">  
+            Being born and raised in the Bay Area, San Francisco has always been a city close to my heart. Its rich Asian American history, dreamlike landscape, and soulwarming food culture has cemented SF's place in my 
+            romanticization of the Golden City. As a hub of tech innovation in the Silicon Valley, home to leading tech giants and ambitious startups, all looking to recruit new talent (especially in AI and machine learning), 
+            it's very likely that my career will one day bring me back home to the Bay.
+        </p>
+        <p class="paragraph">
+            But like many major metroplitan cities, San Francisco struggles with deeply-rooted social and economic challenges. Gentrification, wealth disparity, drug abuse, homelessness, and persistent petty crime cast 
+            a shadow over the city, evoking comparisions to dystopian megacities in science fiction. In this post, I focus on one particular issue: crime and theft. 
+        </p>
+        <p class="paragraph">
+            Though my analysis of police incident reports, I highlight several key insights: that <strong>crime as a yearly trend is decreasing</strong>, the <strong>frequency of incidents increases drastically at several times in the day</strong>, 
+            <strong>thefts are the most common type of offense</strong>, and the <strong>distribution of thefts overall are largely concentrated in several key neighborhoods</strong>. You can find my full analysis in this notebook.
+        </p>
+
+        <p class="heading">Introducing the Dataset</p>
+        <p class="paragraph">
+            San Francisco provides numerous datasets through the DataSF initiative, which seeks to support the residents, businesses, and visitors in the city through accessibility to data. The particular dataset I am using is 
+            the Police Department Incident Reports: 2018 to Present. 
+        </p>
+        <p class="paragraph">
+            This dataset has over <strong>900k rows and 35 columns</strong>, where each row represents a police incident report. Columns describe valuable information about each record, such as its date, time, location, category, and description. 
+            Example categories of incidents include: larceny theft, assaults, and traffic arrests. A critical step in my exploratory data analysis (EDA) is standardizing and consolidating these categories into 
+            more meaningful labels - a process that I'll discuss shortly.
+        </p>
+        <p class="paragraph">
+            A full description of the columns and dataset can be found on DataSF's page. Here is a short snippet:
+        </p>
+
+        <p class="heading">Clean Up the <strike>Streets</strike> Data</p>
+        <p class="paragraph">
+            Before diving into the EDA, the first step is always data cleaning. This section outlines my cleaning pipeline, including missing values, transforming date/time, and unifying incident categories.
+        </p>
+        <p class="paragraph"><strong>Dropping Columns and Missing Values</strong></p>
+        <p class="paragraph">
+            I started with dropping columns that were either redundant or unrelated to the analysis, such as administrative details. Next I addressed missing values. Several variables in this dataset had a large proportion of NaN values. 
+            These, along with the irrelevant columns, were removed from the dataset. A short description of these columns is shown below:
+        </p>
+        <p class="paragraph">
+            After this step, some missing values remained which were all connected to location-related variables. Although a variety of techniques are available to impute missing information, I chose instead to drop these rows. 
+            This decision was motivated by the nature of my analysis. I wanted to highlight key neighborhoods where crimes occured, and did not want to bloat my figures with predicted or imputed datapoints. Subsequently, the 
+            <strong>dataset size was cut</strong> from about <strong>936k to 868k.</strong>
+        </p>
+        <p class="paragraph"><strong>Date and Time Transformation</strong></p>
+        <p class="paragraph">
+            Next, I transformed the original date and time information into numerical and continous variables. Having a continouous variable for time will be extremeley helpful to plot datapoints as well as later apply machine learning models. 
+            Thus, the original <em>'Incident Time'</em> column, which is in format (hr:min), is transformed into a new <em>'time'</em> column which is a continous value in the range [0,24). 
+        </p>
+        <p class="paragraph">
+            Then, from the <em>'Incident Date'</em> column, which is in format (year/month/day), the month is extracted into both discrete <em>'month'</em> and continuous <em>'month_cont'</em> variables. After these transformations, the remaining date and 
+            time variables in the dataset take this form:
+        </p>
+        <p class="paragraph"><strong>Unifying Categories into Major Incidents</strong></p>
+        <p class="paragraph">
+            The *'Incident Category'* variable in the original dataset has 49 distinct categories ranging from traffic arrests, gambling, homicides, thefts, etc. Although the wide range of incidents provides a comprehensive and 
+            exhaustive report of the day to day activites in the city, not all of these categories are related to crime. Many are just minor offenses and shouldn't be included in our analysis. For a full list of these minor incidents, 
+            refer to the project notebook. After removing rows with these categories, we end up with a remaining 29 categories and <strong>dataset size of 673k</strong>. 
+        </p>
+        <p class="paragraph">
+            The remaining categories are then merged into related buckets to further consolidate the data. For example, 'Larceny Thefts' and 'Stolen Property' were united into a single 'Thefts' category. Data entry errors are also handled here, 
+            such as uniting 'Weapons Offense','Weapons Offence', and 'Weapons Carrying Etc' into 'Weapons Offense'. Furthermore, from the 'Other Miscellaneous' category, which includes many non-criminal reports, 'DUI' offenses are 
+            extracted. The rest of the miscellaneous reports are discarded.
+        </p>
+        <p class="paragraph">
+            The <strong>final dataset size is 612k</strong> with 17 distinct Incident Categories. These are dubbed <strong>'Major Incidents'</strong>, and serve as the focus of the following analysis. Below is a breakdown of 'Major Incidents' and their frequencies in the dataset:
+        </p>
+
+        <p class="heading">Insights</p>
+        <p class="paragraph">
+            Using the final transformed dataset of 'Major Incidents', we can begin to analyze the macro and micro crime trends in San Francisco. I set out to answer several questions. How have incident rates changed over the years? What types of incidents 
+            are most common and where do they usually occur? Here are some important insights I derived using visualizations in <strong>Matplotlib.</strong>
+        </p>
+
+        <img alt="placeholder" src="../imgs/1/felis_wild.png" class="figure">
+     </main>
+
+     <footer>
+        <p>Roger Wang - Published March 31st, 2025 - Last Updated Never</p>
+        <div class="references">
+            <p>References</p>
+            <ul>
+                <li>[1] Google website for testing references lol</li>
+                <li>[2] some amazing paper</li>
+            </ul>
+        </div>
+     </footer>
+</body>
+
+
+</html>
