@@ -40,13 +40,13 @@
         </p>
         <p class="paragraph">
             Though my analysis of police incident reports, I highlight several key insights: that <strong>crime as a yearly trend is decreasing</strong>, the <strong>frequency of incidents increases drastically at several times in the day</strong>, 
-            <strong>thefts are the most common type of offense</strong>, and the <strong>distribution of thefts overall are largely concentrated in several key neighborhoods</strong>. You can find my full analysis in this notebook.
+            <strong>thefts are the most common type of offense</strong>, and the <strong>distribution of thefts overall are largely concentrated in several key neighborhoods</strong>. You can find my full analysis in <a href="https://github.com/rogerwng/SFPD_Crime/blob/main/EDA.ipynb">this notebook.</a>
         </p>
 
         <p class="heading">Introducing the Dataset</p>
         <p class="paragraph">
-            San Francisco provides numerous datasets through the DataSF initiative, which seeks to support the residents, businesses, and visitors in the city through accessibility to data. The particular dataset I am using is 
-            the Police Department Incident Reports: 2018 to Present. 
+            San Francisco provides numerous datasets through the <a href="https://datasf.org/opendata/">DataSF initiative</a>, which seeks to support the residents, businesses, and visitors in the city through accessibility to data. The particular dataset I am using is 
+            the <a href="https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-2018-to-Present/wg3w-h783/about_data">Police Department Incident Reports: 2018 to Present.</a> 
         </p>
         <p class="paragraph">
             This dataset has over <strong>900k rows and 35 columns</strong>, where each row represents a police incident report. Columns describe valuable information about each record, such as its date, time, location, category, and description. 
@@ -58,7 +58,7 @@
         </p>
         <div class="figure">
             <img alt="Screenshot of DataSF's page describing dataset" src="../imgs/2/dataset_ex_desc.png">
-            <p>Figure XX. Screenshot of DataSF's page describing some of the dataset columns.</p>
+            <p>Figure 1. Screenshot of DataSF's page describing some of the dataset columns.</p>
         </div>
 
         <p class="heading">Clean Up the <strike>Streets</strike> Data</p>
@@ -72,7 +72,7 @@
         </p>
         <div class="figure">
             <img alt="Description of dropped columns" src="../imgs/2/drop_col_desc.png">
-            <p>Figure XX. A quick look at the columns dropped from the dataset.</p>
+            <p>Figure 2. A quick look at the columns dropped from the dataset.</p>
         </div>
         <p class="paragraph">
             After this step, some missing values remained which were all connected to location-related variables. Although a variety of techniques are available to impute missing information, I chose instead to drop these rows. 
@@ -90,17 +90,17 @@
         </p>
         <div class="figure">
             <img alt="Example rows from dataset showing time variables after transformation" src="../imgs/2/time_cols_after_trans.png">
-            <p>Figure XX. Structure of time variables after transformation.</p>
+            <p>Figure 3. Structure of time variables after transformation.</p>
         </div>
         <p class="paragraph"><strong>Unifying Categories into Major Incidents</strong></p>
         <p class="paragraph">
-            The *'Incident Category'* variable in the original dataset has 49 distinct categories ranging from traffic arrests, gambling, homicides, thefts, etc. Although the wide range of incidents provides a comprehensive and 
+            The <em>'Incident Category'</em> variable in the original dataset has 49 distinct categories ranging from traffic arrests, gambling, homicides, thefts, etc. Although the wide range of incidents provides a comprehensive and 
             exhaustive report of the day to day activites in the city, not all of these categories are related to crime. Many are just minor offenses and shouldn't be included in our analysis. For a full list of these minor incidents, 
             refer to the project notebook. After removing rows with these categories, we end up with a remaining 29 categories and <strong>dataset size of 673k</strong>. 
         </p>
         <p class="paragraph">
             The remaining categories are then merged into related buckets to further consolidate the data. For example, 'Larceny Thefts' and 'Stolen Property' were united into a single 'Thefts' category. Data entry errors are also handled here, 
-            such as uniting 'Weapons Offense','Weapons Offence', and 'Weapons Carrying Etc' into 'Weapons Offense'. Furthermore, from the 'Other Miscellaneous' category, which includes many non-criminal reports, 'DUI' offenses are 
+            such as uniting 'Weapons Offense', 'Weapons Offence', and 'Weapons Carrying Etc' into 'Weapons Offense'. Furthermore, from the 'Other Miscellaneous' category, which includes many non-criminal reports, 'DUI' offenses are 
             extracted. The rest of the miscellaneous reports are discarded.
         </p>
         <p class="paragraph">
@@ -108,7 +108,7 @@
         </p>
         <div class="figure">
             <img alt="List of all major incidents" src="../imgs/2/major_incident_breakdown.png" style="width:60%; display: block; margin: auto;">
-            <p>Figure XX. All the 'Major Incidents'</p>
+            <p>Figure 4. All the 'Major Incidents'</p>
         </div>
 
         <p class="heading">Insights</p>
@@ -123,7 +123,7 @@
         </p>
         <div class="figure">
             <img alt="Bar chart of yearly major incident reports in San Francisco" src="../imgs/2/incidents_by_year.png">
-            <p>Figure XX. Yearly Trends in the Number of Incidents.</p>
+            <p>Figure 5. Yearly Trends in the Number of Incidents.</p>
         </div>
 
         <p class="paragraph"><strong>Thefts, Vandalism, and Assaults Most Common</strong></p>
@@ -133,32 +133,32 @@
         </p>
         <div class="figure">
             <img alt="Pie chart of major incident categories" src="../imgs/2/incidents_per_cat.png">
-            <p>Figure XX. Proportion of Incidents by Category.</p>
+            <p>Figure 6. Proportion of Incidents by Category.</p>
         </div>
         <p class="paragraph">
             Interestingly, while thefts remain dominant, the total number of thefts per year has been decreasing. As a percentage of all incidents, 
             thefts have declined at an average rate of 2.4% per year.
         </p>
         <div class="figure">
-            <img alt="Stacked bar graph of percentage of incidents by year and category" src="../imgs/2/incidents_per_yr_per_cat.png">
-            <p>Figure XX. Percentage of Yearly Incidents by Category.</p>
+            <img alt="Frequency of most common incidents" src="../imgs/2/incident_freq_yearly.png">
+            <p>Figure 7. Frequency of the Five Most Common Incidents.</p>
         </div>
         <div class="figure">
-            <img alt="Frequency of most common incidents" src="../imgs/2/incident_freq_yearly.png">
-            <p>Figure XX. Frequency of the Five Most Common Incidents.</p>
+            <img alt="Stacked bar graph of percentage of incidents by year and category" src="../imgs/2/incidents_per_yr_per_cat.png">
+            <p>Figure 8. Percentage of Yearly Incidents by Category.</p>
         </div>
 
         <p class="paragraph"><strong>Incident Activity Not Correlated with Day of Week or Months</strong></p>
         <p class="paragraph">
-            At the macro level, <strong>incidents</strong> appear to be <strong>uniformly distributed across days of the week and months of year</strong>, showing no clear patterns. 
+            At the macro level, <strong>incidents</strong> appear to be <strong>uniformly distributed across days of the week and months of the year</strong>, showing no clear patterns. 
         </p>
         <div class="figure">
             <img alt="Pie chart of incidents by day of the week" src="../imgs/2/days_pie.png">
-            <p>Figure XX. Proportion of Incidents over Days in the Week.</p>
+            <p>Figure 9. Proportion of Incidents over Days in the Week.</p>
         </div>
         <div class="figure">
             <img alt="Pie chart of incidents by month of the year" src="../imgs/2/months_pie.png">
-            <p>Figure XX. Proportion of Incidents over Months in the Year.</p>
+            <p>Figure 10. Proportion of Incidents over Months in the Year.</p>
         </div>
 
         <p class="paragraph"><strong>Three Peaks in Activity During the Day</strong></p>
@@ -167,14 +167,14 @@
         </p>
         <div class="figure">
             <img alt="Histogram of incident frequency over hours in the day" src="../imgs/2/hist_incidents_hrly.png">
-            <p>Figure XX. Distribution of Incidents over Hours in the Day.</p>
+            <p>Figure 11. Distribution of Incidents over Hours in the Day.</p>
         </div>
         <p class="paragraph">
             However there are several <strong>noticeable peaks</strong> in activity at <strong>12:41PM</strong> (early afternoon spike), <strong>6:07PM</strong> (evening rush), and <strong>11:54PM</strong> (late-night peak). 
         </p>
         <div class="figure">
             <img alt="PDF of incident density over hours in the day" src="../imgs/2/pdf_incidents_hrly.png">
-            <p>Figure XX. Probability Density Function of Distribution of Incidents over Hours in the Day. (Gaussian-KDE)</p>
+            <p>Figure 12. Probability Density Function of Distribution of Incidents over Hours in the Day. (Gaussian-KDE)</p>
         </div>
 
         <p class="paragraph"><strong>Incidents Largely Concentrated in Several Key Neighborhoods</strong></p>
@@ -184,7 +184,7 @@
         </p>
         <div class="figure">
             <img alt="Bar graph of incident frequency by neighborhood" src="../imgs/2/incident_freq_per_year_per_neigh.png">
-            <p>Figure XX. Frequency of Incidents by Neighborhood.</p>
+            <p>Figure 13. Frequency of Incidents by Neighborhood.</p>
         </div>
         <p class="paragraph">
             Furthermore, the <strong>top 10 neighborhoods account for an average of 57% of all incidents per year</strong>, and this has remained largely stable over time. However, some neighborhoods have seen significant changes. In Financial District/South Beach, 
@@ -192,7 +192,7 @@
         </p>
         <div class="figure">
             <img alt="Stacked bar graph of percentage of incidents per year by neighborhood" src="../imgs/2/incidents_percent_per_yr_per_neigh.png">
-            <p>Figure XX. Percentage of Incidents per Year by Neighborhood. Only top ten neighborhoods shown.</p>
+            <p>Figure 14. Percentage of Incidents per Year by Neighborhood. Only top ten neighborhoods shown.</p>
         </div>
         <p class="paragraph">
             By plotting the location of thefts, the most common incident by far, we visualize the density of thefts in the key neighborhoods listed above. Evidently, there is a <strong>clear hotspot in the city's center, near the 
@@ -200,7 +200,7 @@
         </p>
         <div class="figure">
             <img alt="Map of locations of thefts" src="../imgs/2/thefts_map.png" class="figure">
-            <p>Figure XX. A rough heatmap of theft density throughout the city.</p>
+            <p>Figure 15. A rough heatmap of theft density throughout the city.</p>
         </div>
         
         <p class="heading">Future Analysis and ML</p>
@@ -220,8 +220,9 @@
         <div class="references">
             <p>References</p>
             <ul>
-                <li>[1] Google website for testing references lol</li>
-                <li>[2] some amazing paper</li>
+                <li><a href="https://datasf.org/opendata/">[1] DataSF Open Data Portal</a></li>
+                <li><a href="https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-2018-to-Present/wg3w-h783/about_data">[2] Police Incident Reports Dataset</a></li>
+                <li><a href="https://github.com/rogerwng/SFPD_Crime/blob/main/EDA.ipynb">[3] My EDA Notebook</a></li>
             </ul>
         </div>
      </footer>
