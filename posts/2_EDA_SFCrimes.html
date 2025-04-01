@@ -25,6 +25,10 @@
 
      <main>
         <h1 id="title">EDA of San Francisco's Police Incident Reports</h1>
+        <div class="figure">
+            <img alt="Picture of Golden Gate Bridge" src="../imgs/2/alexey-komissarov-unsplash_goldengatebridge.jpg">
+            <p>The stunning Golden Gate Bridge.</p>
+        </div>
         <p class="paragraph">  
             Being born and raised in the Bay Area, San Francisco has always been a city close to my heart. Its rich Asian American history, dreamlike landscape, and soulwarming food culture has cemented SF's place in my 
             romanticization of the Golden City. As a hub of tech innovation in the Silicon Valley, home to leading tech giants and ambitious startups, all looking to recruit new talent (especially in AI and machine learning), 
@@ -52,6 +56,10 @@
         <p class="paragraph">
             A full description of the columns and dataset can be found on DataSF's page. Here is a short snippet:
         </p>
+        <div class="figure">
+            <img alt="Screenshot of DataSF's page describing dataset" src="../imgs/2/dataset_ex_desc.png">
+            <p>Figure XX. Screenshot of DataSF's page describing some of the dataset columns.</p>
+        </div>
 
         <p class="heading">Clean Up the <strike>Streets</strike> Data</p>
         <p class="paragraph">
@@ -62,6 +70,10 @@
             I started with dropping columns that were either redundant or unrelated to the analysis, such as administrative details. Next I addressed missing values. Several variables in this dataset had a large proportion of NaN values. 
             These, along with the irrelevant columns, were removed from the dataset. A short description of these columns is shown below:
         </p>
+        <div class="figure">
+            <img alt="Description of dropped columns" src="../imgs/2/drop_col_desc.png">
+            <p>Figure XX. A quick look at the columns dropped from the dataset.</p>
+        </div>
         <p class="paragraph">
             After this step, some missing values remained which were all connected to location-related variables. Although a variety of techniques are available to impute missing information, I chose instead to drop these rows. 
             This decision was motivated by the nature of my analysis. I wanted to highlight key neighborhoods where crimes occured, and did not want to bloat my figures with predicted or imputed datapoints. Subsequently, the 
@@ -76,6 +88,10 @@
             Then, from the <em>'Incident Date'</em> column, which is in format (year/month/day), the month is extracted into both discrete <em>'month'</em> and continuous <em>'month_cont'</em> variables. After these transformations, the remaining date and 
             time variables in the dataset take this form:
         </p>
+        <div class="figure">
+            <img alt="Example rows from dataset showing time variables after transformation" src="../imgs/2/time_cols_after_trans.png">
+            <p>Figure XX. Structure of time variables after transformation.</p>
+        </div>
         <p class="paragraph"><strong>Unifying Categories into Major Incidents</strong></p>
         <p class="paragraph">
             The *'Incident Category'* variable in the original dataset has 49 distinct categories ranging from traffic arrests, gambling, homicides, thefts, etc. Although the wide range of incidents provides a comprehensive and 
@@ -90,6 +106,10 @@
         <p class="paragraph">
             The <strong>final dataset size is 612k</strong> with 17 distinct Incident Categories. These are dubbed <strong>'Major Incidents'</strong>, and serve as the focus of the following analysis. Below is a breakdown of 'Major Incidents' and their frequencies in the dataset:
         </p>
+        <div class="figure">
+            <img alt="List of all major incidents" src="../imgs/2/major_incident_breakdown.png" style="width:60%; display: block; margin: auto;">
+            <p>Figure XX. All the 'Major Incidents'</p>
+        </div>
 
         <p class="heading">Insights</p>
         <p class="paragraph">
