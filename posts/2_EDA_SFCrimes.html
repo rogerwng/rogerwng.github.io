@@ -96,8 +96,103 @@
             Using the final transformed dataset of 'Major Incidents', we can begin to analyze the macro and micro crime trends in San Francisco. I set out to answer several questions. How have incident rates changed over the years? What types of incidents 
             are most common and where do they usually occur? Here are some important insights I derived using visualizations in <strong>Matplotlib.</strong>
         </p>
+        <p class="paragraph"><strong>Yearly Trends Show Decline in Incidents</strong></p>
+        <p class="paragraph">
+            The total <strong>number of incidents yearly has been declining since 2018</strong>, with an <strong>average yearly decrease</strong> (excluding 2025) of about <strong>3.9k incidents per year</strong>. Notably, incidents reached a low of 77.1k in 2020, the first year of the COVID-19 pandemic. 
+            As the pandemic continued, incidents rose through 2021 and 2022, peaking at 91.5k and then resumed its downward trend. A simple linear regression projects 75.3k incidents in 2025.
+        </p>
+        <div class="figure">
+            <img alt="Bar chart of yearly major incident reports in San Francisco" src="../imgs/2/incidents_by_year.png">
+            <p>Figure XX. Yearly Trends in the Number of Incidents.</p>
+        </div>
 
-        <img alt="placeholder" src="../imgs/1/felis_wild.png" class="figure">
+        <p class="paragraph"><strong>Thefts, Vandalism, and Assaults Most Common</strong></p>
+        <p class="paragraph">
+            <strong>Thefts account for a staggering 41% of incidents since 2018</strong>, making it the <strong>most common offense</strong> by far. Other frequent incidents are vandalisms, assaults, burglaries, and motor vehicle thefts 
+            (theft of an automobile, NOT theft from an automobile).
+        </p>
+        <div class="figure">
+            <img alt="Pie chart of major incident categories" src="../imgs/2/incidents_per_cat.png">
+            <p>Figure XX. Proportion of Incidents by Category.</p>
+        </div>
+        <p class="paragraph">
+            Interestingly, while thefts remain dominant, the total number of thefts per year has been decreasing. As a percentage of all incidents, 
+            thefts have declined at an average rate of 2.4% per year.
+        </p>
+        <div class="figure">
+            <img alt="Stacked bar graph of percentage of incidents by year and category" src="../imgs/2/incidents_per_yr_per_cat.png">
+            <p>Figure XX. Percentage of Yearly Incidents by Category.</p>
+        </div>
+        <div class="figure">
+            <img alt="Frequency of most common incidents" src="../imgs/2/incident_freq_yearly.png">
+            <p>Figure XX. Frequency of the Five Most Common Incidents.</p>
+        </div>
+
+        <p class="paragraph"><strong>Incident Activity Not Correlated with Day of Week or Months</strong></p>
+        <p class="paragraph">
+            At the macro level, <strong>incidents</strong> appear to be <strong>uniformly distributed across days of the week and months of year</strong>, showing no clear patterns. 
+        </p>
+        <div class="figure">
+            <img alt="Pie chart of incidents by day of the week" src="../imgs/2/days_pie.png">
+            <p>Figure XX. Proportion of Incidents over Days in the Week.</p>
+        </div>
+        <div class="figure">
+            <img alt="Pie chart of incidents by month of the year" src="../imgs/2/months_pie.png">
+            <p>Figure XX. Proportion of Incidents over Months in the Year.</p>
+        </div>
+
+        <p class="paragraph"><strong>Three Peaks in Activity During the Day</strong></p>
+        <p class="paragraph">
+            Incident frequency is however linked to the time of day. At a first glance, frequency seems to be nearly normally distributed around an average time of 4:48PM. 
+        </p>
+        <div class="figure">
+            <img alt="Histogram of incident frequency over hours in the day" src="../imgs/2/hist_incidents_hrly.png">
+            <p>Figure XX. Distribution of Incidents over Hours in the Day.</p>
+        </div>
+        <p class="paragraph">
+            However there are several <strong>noticeable peaks</strong> in activity at <strong>12:41PM</strong> (early afternoon spike), <strong>6:07PM</strong> (evening rush), and <strong>11:54PM</strong> (late-night peak). 
+        </p>
+        <div class="figure">
+            <img alt="PDF of incident density over hours in the day" src="../imgs/2/pdf_incidents_hrly.png">
+            <p>Figure XX. Probability Density Function of Distribution of Incidents over Hours in the Day. (Gaussian-KDE)</p>
+        </div>
+
+        <p class="paragraph"><strong>Incidents Largely Concentrated in Several Key Neighborhoods</strong></p>
+        <p class="paragraph">
+            Certain neighborhoods experience consistently higher incidents than others. The five <strong>most affected areas are: Mission, Tenderloin, 
+            Financial District/South Beach, South of Market (SoMa), and Bayview/Hunter's Point.</strong> Many of these areas are located in or near Downtown SF.  
+        </p>
+        <div class="figure">
+            <img alt="Bar graph of incident frequency by neighborhood" src="../imgs/2/incident_freq_per_year_per_neigh.png">
+            <p>Figure XX. Frequency of Incidents by Neighborhood.</p>
+        </div>
+        <p class="paragraph">
+            Furthermore, the <strong>top 10 neighborhoods account for an average of 57% of all incidents per year</strong>, and this has remained largely stable over time. However, some neighborhoods have seen significant changes. In Financial District/South Beach, 
+            citywide incident percentage dropped from 10% in 2018 to 6% in 2024. The Tenderloin, in contrast, has seen an increase from 9% to 11% over the same period.
+        </p>
+        <div class="figure">
+            <img alt="Stacked bar graph of percentage of incidents per year by neighborhood" src="../imgs/2/incidents_percent_per_yr_per_neigh.png">
+            <p>Figure XX. Percentage of Incidents per Year by Neighborhood. Only top ten neighborhoods shown.</p>
+        </div>
+        <p class="paragraph">
+            By plotting the location of thefts, the most common incident by far, we visualize the density of thefts in the key neighborhoods listed above. Evidently, there is a <strong>clear hotspot in the city's center, near the 
+            Tenderloin, Downtown, and Western Addition neighborhoods.</strong>
+        </p>
+        <div class="figure">
+            <img alt="Map of locations of thefts" src="../imgs/2/thefts_map.png" class="figure">
+            <p>Figure XX. A rough heatmap of theft density throughout the city.</p>
+        </div>
+        
+        <p class="heading">Future Analysis and ML</p>
+        <p class="paragraph">
+            Although we have highlighted some important discoveries through this dataset, there are still many unanwswered questions. For example, how does the distribution of incidents across neighborhoods change 
+            when we calculate incidents per capita? Do certain types of incidents deviate from the overall distribution across the time of day? And many more.
+        </p>
+        <p class="paragraph">
+            The next step in this project will be preparing the dataset for machine learning models to predict incident occurences and categories. By leveraging techniques such as <strong>time series forecasting</strong> and <strong>classification models</strong>, 
+            I aim to uncover deeper patterns and enhance predictive insights.
+        </p>
+
      </main>
 
      <footer>
