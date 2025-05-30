@@ -26,8 +26,8 @@
      <main>
         <h1 id="title">Forecasting Daily Crime Rates in San Francisco using XGBoost</h1>
         <div class="figure">
-            <img alt="" src="">
-            <p></p>
+            <img alt="Alcatraz" src="../imgs/3/alcatraz.jpg">
+            <p>Alcatraz - a reflection of San Francisco's rugged history.</p>
         </div>
         <p class="paragraph">
             Every city has its own rhythm, a heartbeat shaped by the people, streets, and the seasons. 
@@ -55,54 +55,46 @@
             non-criminal incidents, as this project focuses on forecasting crime and other major offenses.
         </p>
         <p class="paragraph">
-            The time series data is created by rounding each timestep to its nearest day, and then aggregating 
-            the daily data. This results in daily crime rates from January 1st, 2018 to March 2nd, 2025, 
-            a total of 2618 datapoints. The raw data is shown below:
+            The time series data is created by aggregating each timestep to the nearest day, resulting in the daily crime rates shown below:
         </p>
 
         <div class="figure">
             <img alt="Raw Time Series Data" src="../imgs/3/rawtimeseries.png">
-            <p>Raw time series data</p>
+            <p>Figure 1. Raw time series data.</p>
         </div>
 
-        <p class="paragraph">
-            Although using hourly data would provide more datapoints, the resulting time series was extremely 
-            noisy and lacked any clear trends or patterns. In contrast, daily crime rates show cleaner structure and 
-            is more suitable for forecasting.
-        </p>
         <p class="paragraph">
             The forecasting task is to predict the crime rate of the next day based on the historical data.
         </p>
 
         <p class="heading">Feature Engineering</p>
         <p class="paragraph">
-            First I addressed outliers, of which this dataset has many. Outliers can distort model accuracy 
-            and negatively impact convergence and evaluation metrics such as RMSE, which is especially sensitive 
+            First I addressed outliers, which can distort model accuracy, convergence, and evaluation metrics such as RMSE, which is especially sensitive 
             to large residuals. I compared two methods of outlier handling: rolling window winsorization and 
             rolling z-score replacement. 
         </p>
         <p class="paragraph">
-            Winsorizing over a window replaces extreme datapoints with values at the percentile cutoffs. 
-            This means any datapoint outside of the cutoff range are replaced by their nearest bounds. For example, 
+            Winsorizing replaces extreme datapoints with values at the percentile cutoffs. 
+            This means any datapoint outside of the cutoff range is replaced by the nearest bound. For example, 
             in a 90-day window and cutoffs at the 1st/99th percentiles, the points greater than the 99th percentile 
-            would be replaced by the value at that upper bound, and vice versa. Here's how the data looks after this transformation:
+            would be replaced by the value at the 99th percentile, and vice versa. Here's how this looks:
         </p>
 
         <div class="figure">
             <img alt="Data After Winsorization" src="../imgs/3/winsorizing.png">
-            <p>Time series after winsorization</p>
+            <p>Figure 2. Time series after winsorization.</p>
         </div>
 
         <p class="paragraph">
-            Rolling z-score replacement calculates the mean and standard deviation of the window. Z-score is calculated 
-            as the difference between a datapoint and the mean in units of standard deviation. All points outside the 
+            Rolling z-score replacement calculates the mean and standard deviation. Z-score is 
+            the difference between a datapoint and the mean in units of standard deviation. All points outside a 
             threshold are clipped to fit within that range. Here is what the data looks like under a threshold of 2 
             standard deviations over a 30-day window:
         </p>
 
         <div class="figure">
             <img alt="Data After Z-Score Replacement" src="../imgs/3/zscore.png">
-            <p>Time series after z-score replacement</p>
+            <p>Figure 3. Time series after z-score replacement.</p>
         </div>
 
         <p class="paragraph">
@@ -117,7 +109,7 @@
 
         <div class="figure">
             <img alt="Differenced Data and PACF" src="../imgs/3/rawdifferencepacf.png">
-            <p>Differenced data and PACF plots</p>
+            <p>Figure 4. Differenced data and PACF plots.</p>
         </div>
 
         <p class="paragraph">
@@ -125,54 +117,53 @@
             mean, standard deviation, and trend (difference between successive window means).
         </p>
         <p class="paragraph">
-            All features were calculated carefully to prevent data leakage, without including any information beyond the 
+            All features were calculated carefully to prevent data leakage by withholding any information beyond the 
             current date. Since the target variable is the next day's crime rates using current and past information, 
             this approach is safe.
         </p>
         <p class="paragraph">
             Additionally, I extracted several calendar-based features. These include year, month, day of the week, 
-            day of the month, and day of the year. I also added boolean indicators for weekends and holidays.
+            day of the month, day of the year, and boolean indicators for weekends and holidays.
         </p>
         <p class="paragraph">
             To preserve the cyclical nature of time features, I encoded month, day of the week, day of the month, 
             and day of the year using sin and cos transformations.
         </p>
         <p class="paragraph">
-            After these efforts, the final time series dataset has 32 predictor features and 1 target, the crime rate of the next day. 
+            The final time series dataset has 32 predictor features and 1 target, the crime rate of the next day. 
         </p>
 
         <p class="heading">Modelling with XGBoost</p>
         <p class="paragraph">
-            With the time series data now set up as a standard supervised learning problem, we can apply XGBoost. 
-            This is a powerful gradient boosting library well-suited for tabular datasets. While traditional time series 
+            With the time series data now set up as a standard supervised learning problem, we can apply XGBoost, a powerful gradient
+            boosting library well-suited for tabular datasets. While traditional time series 
             models like ARIMA or Exponential Smoothing, and deep learning approaches such as LSTMs or Transformers are also 
             common, XGBoost offers strong performance with less tuning and greater interpretability.
         </p>
         <p class="paragraph">
-            The key in training XGBoost as a time series forecaster is to take care in our train/test split to avoid 
-            data leakage. Instead of randomizing the train/test split as we would in traditional problems, we instead 
+            The key in training XGBoost as a time series forecaster is to avoid 
+            data leakage. Instead of randomizing the train/test split we instead 
             split the data chronologically at a specific cutoff date.
         </p>
 
         <div class="figure">
             <img alt="Train/Test Split" src="../imgs/3/traintestsplit.png">
-            <p>A simple train/test split</p>
+            <p>Figure 5. A simple train/test split.</p>
         </div>
         
         <p class="paragraph">
             The choice of cutoff date depends on the forecasting horizon, how far ahead we want to predict. Since we 
-            want to forecast the remainder of 2025, 9 months from March to December, we set a test size of at least 9 months. 
+            want to forecast the remainder of 2025, from March to December, we set a test size of at least 9 months. 
         </p>
         <p class="paragraph">
             While a single train/test split is good for a baseline, we need a more robust strategy for fine-tuning. 
-            To do this, we apply time series cross-validation. We select a cutoff date for each fold, use a defined 
-            window of data after that date for validation, and advance the cutoff for the next fold. We average our 
-            scores as we go.
+            Thus, we apply time series cross-validation. We select a cutoff date for each fold, use a defined 
+            window of data after that date for validation, and advance the cutoff for the next fold, averaging the scores as we go.
         </p>
 
         <div class="figure">
-            <img alt="Cross-validation Splits with 3 Folds" src="">
-            <p>Cross-validation split with 3 folds</p>
+            <img alt="Cross-validation Splits with 3 Folds" src="../imgs/3/kfolds.png">
+            <p>Figure 6. Cross-validation split with 3 folds.</p>
         </div>
 
         <p class="paragraph">
@@ -190,8 +181,8 @@
         </p>
 
         <div class="figure">
-            <img alt="Block Diagram of Data and Model Pipeline" src="">
-            <p>The data and model pipeline</p>
+            <img alt="Block Diagram of Data and Model Pipeline" src="../imgs/3/sfcrime_forecast_block.png">
+            <p>Figure 7. The data and model pipeline.</p>
         </div>
 
         <p class="heading">Results</p>
@@ -201,22 +192,21 @@
 
         <div class="figure">
             <img alt="Fine-tuned Model Performance on Dataset" src="../imgs/3/trainseteval.png">
-            <p>Performance of best model on dataset</p>
+            <p>Figure 8. Performance of best model on dataset.</p>
         </div>
 
         <p class="paragraph">
             Note that our model evaluations don't fully reflect their forecasting ability. After all, the cross-validation 
-            scores are taken by using the model to predict on the entire test set at once, assuming all past information is 
-            known. Recursive prediction on the other hand, means that any errors that the model makes in predictions 
-            eventually stack up and compound over time. This makes long-range forecasting more challenging and sensitive to errors.
+            scores are taken by using the model to predict on the entire test set at once, given no errors in features like rolling means. Recursive prediction on the other hand,
+            tendd to accumulate errors over time. This makes long-range forecasting more challenging and sensitive.
         </p>
         <p class="paragraph">
-            Here is a visualization of how this model performs on each cross-validation split (separate model at each split, same hyperparams).
+            Here is a visualization of how this model performs on each cross-validation split.
         </p>
 
         <div class="figure">
             <img alt="Fine-tune Model Performance on Cross-Validation" src="../imgs/3/kfoldforecast.png">
-            <p>Performance of best model on each CV fold</p>
+            <p>Figure 9. Performance of best model on each CV fold.</p>
         </div>
 
         <p class="paragraph">
@@ -225,7 +215,7 @@
 
         <div class="figure">
             <img alt="2025 Crime Rate Forecast" src="../imgs/3/2025forecast.png">
-            <p>Crime rate forecast for 2025</p>
+            <p>Figure 10. Crime rate forecast for 2025.</p>
         </div>
 
         <p class="heading">Future Directions</p>
@@ -234,17 +224,17 @@
         </p>
         <p class="paragraph">
             Currently, the model produces a point estimate, a single value that forecasts the crime rate for the next day. 
-            Point forecasts usually lack robustness, especially in noisy real-world settings. A better approach would be 
-            to predict a range of likely values thereby introducing a level of forecast uncertainty.
+            Point forecasts lack robustness in noisy real-world settings. Predicting a range of likely values with some level of uncertainty
+            would be a more informative appraoch.
         </p>
         <p class="paragraph">
-            This is where quantile regression becomes valuable. XGBoost supports quantile objectioves, which allow the training 
-            of separate models for the lower and upper bounds (10th and 90th percentiles for example). These bounds define 
+            This is where quantile regression becomes valuable. XGBoost supports quantile objectives, which allow the training 
+            of separate models for the lower and upper bounds (10th and 90th percentiles for example) of a forecast. These define 
             a confidence interval, a probabilisic region where the actual crime rate is likely to land. Future work on 
-            this project could explore quantile regression and compare its forecasting performance against point-based models.
+            this project could explore quantile regression and compare its forecasting performance.
         </p>
         <p class="paragraph">
-            Additionally, while XGBoost is a great baseline, it would be insightful to compare it with other popular time series 
+            Additionally, it would be insightful to compare XGBoost with other popular time series 
             strategies. These include classicial methods such as ARIMA and Exponential Smoothing as well as modern deep 
             learning approaches like LSTMs and Transformers. 
         </p>
