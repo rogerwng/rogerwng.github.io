@@ -1,3 +1,1 @@
-This repo is currently in development.  
-
-It will eventually feature my portfolio website.
+My portfolio website made with static HTML/CSS/JS. Inspired by the Minimal Theme in Jekyll.
